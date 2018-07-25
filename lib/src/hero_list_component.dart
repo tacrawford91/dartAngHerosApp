@@ -34,12 +34,26 @@ class HeroListComponent implements OnInit {
   void ngOnInit() => _getHeroes();
   String _heroUrl(int id) =>
       paths.hero.toUrl(parameters: {paths.idParam: id.toString()});
-  // async methods
+  // get Heroes to List
   Future<void> _getHeroes() async {
     heroes = await _heroService.getAll();
   }
   Future<NavigationResult> gotoDetail() =>
       _router.navigate(_heroUrl(selected.id));
+
+  //Save hero input and create hero by calling service
+  Future<void> add(String name) async {
+    name = name.trim();
+    if (name.isEmpty) return null;
+    heroes.add(await _heroService.create(name));
+    selected = null;
+  }
+  //delete Hero
+  Future<void> delete(Hero hero) async {
+    await _heroService.delete(hero.id);
+    heroes.remove(hero);
+    if (selected == hero) selected = null;
+  }
 
 
 }

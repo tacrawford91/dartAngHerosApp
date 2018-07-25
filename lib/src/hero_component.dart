@@ -21,7 +21,13 @@ class HeroComponent implements OnActivate{
 
   HeroComponent(this._heroService,this._location);
 
+  //go back when button in template is clicked
   void goBack() => _location.back();
+  //Save edited error when save is clicked. Must call from service
+  Future<void> save() async {
+    await _heroService.update(hero);
+    goBack();
+  }
 
   @override
   Future<void> onActivate(_, RouterState current) async {
